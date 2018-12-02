@@ -60,18 +60,9 @@ public class ContactsListingAdapter extends CustomRecyclerViewAdapter {
         final ViewHolder type_item = (ViewHolder) holder;
         final ContactDetail contactDetail = getListing().get(position);
 
-        setText(type_item.tvName,contactDetail.getName());
-        setText(type_item.tvMobileNumber,contactDetail.getPhoneNumber());
-        setText(type_item.tvAddress,contactDetail.getAddress());
-        setText(type_item.tvMail,contactDetail.getEmailID());
-        setText(type_item.tvName,contactDetail.getName());
-
-        setDrawable(type_item.ivCall,contactDetail.getPhoneNumber(),1);
-        setDrawable(type_item.ivMail,contactDetail.getEmailID(),2);
-        setDrawable(type_item.ivWeb,contactDetail.getWebLink(),3);
+        setText(type_item.tvText,contactDetail.getText());
+        setText(type_item.tvType,contactDetail.getType().toString());
         setDrawable(type_item.ivDelete,"enable_delete",4);
-
-        setAvatarBackground(type_item.cvProfile,position);
 
         type_item.ivDelete.setColorFilter(ContextCompat.getColor(context,R.color.cl_delete_drawable_color));
 
@@ -80,21 +71,6 @@ public class ContactsListingAdapter extends CustomRecyclerViewAdapter {
         type_item.cvDetails.setOnClickListener(view -> {
             if (customItemClickListener != null)
                 customItemClickListener.onItemClick(view, type_item.getAdapterPosition());
-        });
-
-        type_item.ivCall.setOnClickListener(view -> {
-            if (customItemClickListener != null)
-                customItemClickListener.onItemClick(view, type_item.getAdapterPosition(),ActionItem.CALL);
-        });
-
-        type_item.ivMail.setOnClickListener(view -> {
-            if (customItemClickListener != null)
-                customItemClickListener.onItemClick(view, type_item.getAdapterPosition(),ActionItem.MAIL);
-        });
-
-        type_item.ivWeb.setOnClickListener(view -> {
-            if (customItemClickListener != null)
-                customItemClickListener.onItemClick(view, type_item.getAdapterPosition(),ActionItem.WEB);
         });
 
         type_item.ivDelete.setOnClickListener(view -> {
@@ -134,19 +110,6 @@ public class ContactsListingAdapter extends CustomRecyclerViewAdapter {
         }
     }
 
-    private void setAvatarBackground(CardView cvDetails, int pos)
-    {
-        String colorCodes[]={"#19BC9C","#2ECC71","#3398DB","#9B59B6","#34495E","#F1C40E","#E67E21","#E74C3C","#27969F","#716359"};
-
-      /*  Random rand = new Random();
-        int index = rand.nextInt(colorCodes.length);*/
-
-        int index=pos%colorCodes.length;
-
-        Log.d(TAG, "setAvatarBackground: "+index);
-
-        cvDetails.setCardBackgroundColor(Color.parseColor(colorCodes[index]));
-    }
 
     public enum ActionItem
     {
@@ -163,28 +126,14 @@ public class ContactsListingAdapter extends CustomRecyclerViewAdapter {
 
     public class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.ivThumb)
-        ImageView ivThumb;
-        @BindView(R.id.tvName)
-        TextView tvName;
-        @BindView(R.id.tvMobileNumber)
-        TextView tvMobileNumber;
-        @BindView(R.id.tvAddress)
-        TextView tvAddress;
-        @BindView(R.id.tvMail)
-        TextView tvMail;
-        @BindView(R.id.ivCall)
-        ImageView ivCall;
-        @BindView(R.id.ivMail)
-        ImageView ivMail;
-        @BindView(R.id.ivWeb)
-        ImageView ivWeb;
+        @BindView(R.id.tvText)
+        TextView tvText;
+        @BindView(R.id.tvType)
+        TextView tvType;
         @BindView(R.id.ivDelete)
         ImageView ivDelete;
         @BindView(R.id.cvDetails)
         CardView cvDetails;
-        @BindView(R.id.cvProfile)
-        CardView cvProfile;
 
         public ViewHolder(View itemView) {
             super(itemView);

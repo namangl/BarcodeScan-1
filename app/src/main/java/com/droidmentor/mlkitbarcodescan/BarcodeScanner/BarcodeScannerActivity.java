@@ -93,7 +93,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         FirebaseVisionBarcodeDetectorOptions options =
                 new FirebaseVisionBarcodeDetectorOptions.Builder()
                         .setBarcodeFormats(
-                                FirebaseVisionBarcode.FORMAT_QR_CODE)
+                                FirebaseVisionBarcode.FORMAT_ALL_FORMATS)
                         .build();
 
         FirebaseVisionBarcodeDetector detector = FirebaseVision.getInstance()
@@ -221,50 +221,23 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                     Log.d(TAG, "onSuccess format: " + barCode.getFormat());
                     Log.d(TAG, "onSuccess valueType: " + barCode.getValueType());
 
-                    FirebaseVisionBarcode.ContactInfo contactInfo = barCode.getContactInfo();
+                    String text = barCode.getRawValue();
+                    Integer type = barCode.getValueType();
 
                     ContactDetail contactDetail = new ContactDetail();
 
-                    if (contactInfo != null) {
-                        if (contactInfo.getName() != null && !TextUtils.isEmpty(contactInfo.getName().getFormattedName())) {
-                            Log.d(TAG, "onSuccess: getFormattedName" + contactInfo.getName().getFormattedName());
-                            contactDetail.setName(contactInfo.getName().getFormattedName());
-                        }
-
-                        if (contactInfo.getAddresses().size() > 0) {
-                            Log.d(TAG, "onSuccess: getAddresses" + contactInfo.getAddresses().get(0).getAddressLines()[0]);
-                            contactDetail.setAddress(contactInfo.getAddresses().get(0).getAddressLines()[0]);
-                        }
-
-                        if (contactInfo.getEmails().size() > 0) {
-                            Log.d(TAG, "onSuccess: getEmails" + contactInfo.getEmails().get(0).getAddress());
-                            contactDetail.setEmailID(contactInfo.getEmails().get(0).getAddress());
-                        }
-
-                        if (contactInfo.getPhones().size() > 0) {
-                            Log.d(TAG, "onSuccess: getPhones" + contactInfo.getPhones().get(0).getNumber());
-                            contactDetail.setPhoneNumber(contactInfo.getPhones().get(0).getNumber());
-
-                        }
-
-                        if (!TextUtils.isEmpty(contactInfo.getOrganization())) {
-                            Log.d(TAG, "onSuccess: getOrganization" + contactInfo.getOrganization());
-                            contactDetail.setOrgName(contactInfo.getOrganization());
-                        }
-
-                        if (contactInfo.getUrls() != null && contactInfo.getUrls().length > 0) {
-                            String[] urlList = contactInfo.getUrls();
-                            Log.d(TAG, "onSuccess: getUrls" + urlList[0]);
-                            contactDetail.setWebLink(urlList[0]);
-                        }
-
-                        if (!dbHandler.isAccountAlreadyExist(contactDetail.getName(), contactDetail.getPhoneNumber())) {
-                            dbHandler.insertAccountDetails(contactDetail);
-                            Log.d(TAG, "onSuccess: Added");
-                            isAdded = true;
-                            finish();
-                        } else
-                            showToast("This account is already exists");
+                    if (text != null) {
+                            contactDetail.setText(text);
+                            contactDetail.setType(type);
+                            preview.stop();
+                            if (!dbHandler.isAccountAlreadyExist(contactDetail.getText(), contactDetail.getType())) {
+                                dbHandler.insertAccountDetails(contactDetail);
+                                Log.d(TAG, "onSuccess: Added");
+                                isAdded = true;
+                                finish();
+                            } else{
+                                showToast("Already Added");
+                            }
                     }
                 }
 

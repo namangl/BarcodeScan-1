@@ -10,17 +10,9 @@ public class ContactDetail
     @DatabaseField(generatedId=true)
     private int id;
     @DatabaseField
-    private String name;
+    private String text;
     @DatabaseField
-    private String address;
-    @DatabaseField
-    private String emailID;
-    @DatabaseField
-    private String phoneNumber;
-    @DatabaseField
-    private String orgName;
-    @DatabaseField
-    private String webLink;
+    private Integer type;
 
     public int getId() {
         return id;
@@ -30,51 +22,18 @@ public class ContactDetail
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public void setText(String text) {
+        this.text = text;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public String getText() {
+        return text;
+    }
+    public Integer getType() {
+        return type;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
-
-    public String getEmailID() {
-        return emailID;
-    }
-
-    public void setEmailID(String emailID) {
-        this.emailID = emailID;
-    }
-
-    public String getPhoneNumber() {
-        return phoneNumber;
-    }
-
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
-    }
-
-    public String getWebLink() {
-        return webLink;
-    }
-
-    public void setWebLink(String webLink) {
-        this.webLink = webLink;
-    }
-
-    public String getOrgName() {
-        return orgName;
-    }
-
-    public void setOrgName(String orgName) {
-        this.orgName = orgName;
+    public void setType(Integer type) {
+        this.type = type;
     }
 }

@@ -99,34 +99,6 @@ public class HomeActivity extends AppCompatActivity {
             public void onItemClick(View v, int position, ContactsListingAdapter.ActionItem actionItem) {
                 switch(actionItem)
                 {
-                    case CALL:
-                        AlertDialogModel callAlertDialog=new AlertDialogModel();
-                        callAlertDialog.setTitle("Phone");
-                        callAlertDialog.setDesc(contactDetailArrayList.get(position).getPhoneNumber());
-                        callAlertDialog.setCancelable(true);
-                        callAlertDialog.setPositiveText("Call");
-                        callAlertDialog.setNegativeText("Cancel");
-                        alertDialogHelper.showAlertDialog(callAlertDialog,null);
-                        break;
-                    case MAIL:
-                        AlertDialogModel mailAlertDialog=new AlertDialogModel();
-                        mailAlertDialog.setTitle("Mail to");
-                        mailAlertDialog.setDesc(contactDetailArrayList.get(position).getEmailID());
-                        mailAlertDialog.setCancelable(true);
-                        mailAlertDialog.setPositiveText("Send");
-                        mailAlertDialog.setNegativeText("Cancel");
-                        alertDialogHelper.showAlertDialog(mailAlertDialog,null);
-                        break;
-                    case WEB:
-                        // Redirect to web
-                        Intent i = new Intent(Intent.ACTION_VIEW);
-                        String url=contactDetailArrayList.get(position).getWebLink();
-                        if(url.contains("https://")||url.contains("http://"))
-                             i.setData(Uri.parse(url));
-                        else
-                            i.setData(Uri.parse("https://"+url));
-                        startActivity(i);
-                        break;
                     case DELETE:
                         // Get confirmation and delete
                         AlertDialogModel deleteAlertDialog=new AlertDialogModel();

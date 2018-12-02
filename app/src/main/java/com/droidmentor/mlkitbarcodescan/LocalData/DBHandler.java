@@ -77,12 +77,8 @@ public class DBHandler
         UpdateBuilder<ContactDetail, Integer> updateBuilder = accountREDao.updateBuilder();
         try {
             updateBuilder.where().eq("id", accountID);
-            updateBuilder.updateColumnValue("name", accountDetails.getName());
-            updateBuilder.updateColumnValue("address", accountDetails.getAddress());
-            updateBuilder.updateColumnValue("emailID", accountDetails.getEmailID());
-            updateBuilder.updateColumnValue("phoneNumber", accountDetails.getPhoneNumber());
-            updateBuilder.updateColumnValue("webLink", accountDetails.getWebLink());
-            updateBuilder.updateColumnValue("orgName", accountDetails.getOrgName());
+            updateBuilder.updateColumnValue("text", accountDetails.getText());
+            updateBuilder.updateColumnValue("type", accountDetails.getType());
             updateBuilder.update();
             Log.d(TAG, "updateAccountDetails: ");
         } catch (SQLException e) {
@@ -98,7 +94,7 @@ public class DBHandler
         accountREDao.deleteById(accountID);
     }
 
-    public boolean isAccountAlreadyExist(String name, String phoneNumber)
+    public boolean isAccountAlreadyExist(String text, Integer type)
     {
         List<ContactDetail> contactDetailList;
         try {
@@ -106,9 +102,9 @@ public class DBHandler
             QueryBuilder<ContactDetail, Integer> qb = accountREDao.queryBuilder();
 
             Where<ContactDetail, Integer> where = qb.where();
-            where.eq("name", name);
+            where.eq("text", text);
             where.and();
-            where.eq("phoneNumber", phoneNumber);
+            where.eq("type", type);
 
             PreparedQuery<ContactDetail> pq = qb.prepare();
 
