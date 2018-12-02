@@ -87,6 +87,7 @@ public class CameraSource {
   private final int requestedPreviewWidth = 1024;
   private final int requestedPreviewHeight = 768;
   private final boolean requestedAutoFocus = true;
+  private Boolean mFlashState;
 
   // These instances need to be held onto to avoid GC of their underlying resources.  Even though
   // these aren't used outside of the method that creates them, they still must have hard
@@ -198,6 +199,53 @@ public class CameraSource {
     return this;
   }
 
+  private static boolean isFlashSupported(Camera camera) {
+    if (camera != null) {
+      Camera.Parameters parameters = camera.getParameters();
+      if (parameters.getFlashMode() == null) {
+        return false;
+      } else {
+        List<String> supportedFlashModes = parameters.getSupportedFlashModes();
+        return supportedFlashModes != null && !supportedFlashModes.isEmpty() && (supportedFlashModes.size() != 1 || !((String)supportedFlashModes.get(0)).equals("off"));
+      }
+    } else {
+      return false;
+    }
+  }
+
+
+  public void setFlash(boolean turnOn) {
+    this.mFlashState = turnOn;
+    if (this.camera != null && isFlashSupported(this.camera)) {
+        Camera.Parameters parameters = this.camera.getParameters();
+      if (turnOn) {
+        if (parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH)) {
+          return;
+        }
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_TORCH);
+      } else {
+        if (parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_OFF)) {
+          return;
+        }
+        parameters.setFlashMode(Camera.Parameters.FLASH_MODE_OFF);
+      }
+      this.camera.setParameters(parameters);
+    }
+
+  }
+
+  /**
+   *
+   * @return true if the flash is on
+   */
+  public boolean getFlash() {
+    if (this.camera != null && isFlashSupported(this.camera)) {
+      Camera.Parameters parameters = this.camera.getParameters();
+      return parameters.getFlashMode().equals(Camera.Parameters.FLASH_MODE_TORCH);
+    } else {
+      return false;
+    }
+  }
   /**
    * Closes the camera and stops sending frames to the underlying frame detector.
    *

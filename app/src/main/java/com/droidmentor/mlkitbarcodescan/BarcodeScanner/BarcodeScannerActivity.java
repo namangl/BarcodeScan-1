@@ -2,16 +2,20 @@ package com.droidmentor.mlkitbarcodescan.BarcodeScanner;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.droidmentor.mlkitbarcodescan.BarCodeScannerUtil.BarcodeScanningProcessor;
@@ -36,6 +40,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 import static com.droidmentor.mlkitbarcodescan.Util.BarcodeScanner.Constants.KEY_CAMERA_PERMISSION_GRANTED;
 import static com.droidmentor.mlkitbarcodescan.Util.BarcodeScanner.Constants.PERMISSION_REQUEST_CAMERA;
@@ -63,7 +68,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
     boolean isAdded = false;
 
-
+//    private Button setFlash;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -75,6 +80,15 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_barcode_scanner);
+//        setFlash = (Button) findViewById(R.id.setFlash);
+//        setFlash.setOnClickListener(new View.OnClickListener() {
+//            @Override public void onClick(View v) {
+//                if (mCameraSource!=null){
+//                    mCameraSource.setFlash(!mCameraSource.getFlash());
+//                    updateFlashUi();
+//                }
+//            }
+//        });
 
         ButterKnife.bind(this);
 
@@ -83,6 +97,31 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         if (preview != null)
             if (preview.isPermissionGranted(true, mMessageSender))
                 new Thread(mMessageSender).start();
+    }
+
+    @OnClick(R.id.setFlash)
+    public void onViewClicked() {
+        if (mCameraSource!=null){
+            mCameraSource.setFlash(!mCameraSource.getFlash());
+            updateFlashUi();
+        }
+    }
+
+
+    private void updateFlashUi(){
+        FloatingActionButton fab = findViewById(R.id.setFlash);
+        if (mCameraSource==null){
+            fab.hide();
+        } else {
+            fab.show();
+
+            if (mCameraSource.getFlash()){
+                fab.setImageResource(R.drawable.ic_flash_on);
+            }
+            else{
+                fab.setImageResource(R.drawable.ic_flash_off);
+            }
+        }
     }
 
 
