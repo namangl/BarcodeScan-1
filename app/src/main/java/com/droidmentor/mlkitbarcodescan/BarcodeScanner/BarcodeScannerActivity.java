@@ -1,7 +1,9 @@
 package com.droidmentor.mlkitbarcodescan.BarcodeScanner;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
@@ -56,6 +58,9 @@ public class BarcodeScannerActivity extends AppCompatActivity {
     @BindView(R.id.overlayView)
     OverlayView overlayView;
 
+    private static final String EXTRA_BARCODE_FORMAT = "EXTRA_BARCODE_FORMAT";
+    public final static String RETURN_BARCODE = "RETURN_BARCODE";
+
     BarcodeScanningProcessor barcodeScanningProcessor;
 
     private CameraSource mCameraSource = null;
@@ -68,7 +73,15 @@ public class BarcodeScannerActivity extends AppCompatActivity {
 
     boolean isAdded = false;
 
-//    private Button setFlash;
+    public static Intent getStartingIntent(Context context){
+        return new Intent(context, BarcodeScannerActivity.class);
+    }
+
+    public static Intent getStartingIntent(Context context, int barcodeFormat){
+        return getStartingIntent(context)
+                .putExtra(EXTRA_BARCODE_FORMAT,barcodeFormat);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -251,14 +264,11 @@ public class BarcodeScannerActivity extends AppCompatActivity {
         return new BarcodeResultListener() {
             @Override
             public void onSuccess(@Nullable Bitmap originalCameraImage, @NonNull List<FirebaseVisionBarcode> barcodes, @NonNull FrameMetadata frameMetadata, @NonNull GraphicOverlay graphicOverlay) {
-                Log.d(TAG, "onSuccess: " + barcodes.size());
+
 
                 for (FirebaseVisionBarcode barCode : barcodes)
                 {
 
-                    Log.d(TAG, "onSuccess rawValue: " + barCode.getRawValue());
-                    Log.d(TAG, "onSuccess format: " + barCode.getFormat());
-                    Log.d(TAG, "onSuccess valueType: " + barCode.getValueType());
 
                     String text = barCode.getRawValue();
                     Integer type = barCode.getValueType();
@@ -271,8 +281,8 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                             preview.stop();
                             if (!dbHandler.isAccountAlreadyExist(contactDetail.getText(), contactDetail.getType())) {
                                 dbHandler.insertAccountDetails(contactDetail);
-                                Log.d(TAG, "onSuccess: Added");
                                 isAdded = true;
+                                setResult(Activity.RESULT_OK, new Intent().putExtra(RETURN_BARCODE,contactDetail.getText()));
                                 finish();
                             } else{
                                 showToast("Already Added");

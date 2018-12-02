@@ -9,6 +9,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.droidmentor.mlkitbarcodescan.BarcodeScanner.BarcodeScannerActivity;
 import com.droidmentor.mlkitbarcodescan.ContactsListing.ContactsListingAdapter;
@@ -27,6 +29,10 @@ import butterknife.OnClick;
 public class HomeActivity extends AppCompatActivity {
 
     String TAG = "HomeActivity";
+
+    private Toast toast;
+
+    public final static int BARCODE_RESULT = 1;
     DBHandler dbHandler;
     @BindView(R.id.rvContactsList)
     RecyclerView rvContactsList;
@@ -83,8 +89,16 @@ public class HomeActivity extends AppCompatActivity {
 
     @OnClick(R.id.fabAdd)
     public void onViewClicked() {
-        Intent barcodeScanner=new Intent(this, BarcodeScannerActivity.class);
-        startActivity(barcodeScanner);
+        startActivityForResult(BarcodeScannerActivity.getStartingIntent(HomeActivity.this),BARCODE_RESULT);
+    }
+    @Override protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==RESULT_OK && requestCode==BARCODE_RESULT){
+            String barcode = data.getStringExtra(BarcodeScannerActivity.RETURN_BARCODE);
+            if (barcode!=null){
+                showToast(barcode);
+            }
+        }
     }
 
     public CustomItemClickListener getItemCLickListener()
@@ -137,5 +151,21 @@ public class HomeActivity extends AppCompatActivity {
         };
 
         return customItemClickListener;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (toast != null) {
+            toast.cancel();
+        }
+    }
+
+    public void showToast(String message) {
+        if (toast != null) {
+            toast.cancel();
+        }
+        toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+        toast.show();
     }
 }
