@@ -99,6 +99,12 @@ public class HomeActivity extends AppCompatActivity {
                 showToast(barcode);
             }
         }
+        else if (resultCode==RESULT_CANCELED && requestCode==BARCODE_RESULT){
+            String barcode = data.getStringExtra(BarcodeScannerActivity.RETURN_BARCODE);
+            if (barcode!=null){
+                showToast("Already added: " + barcode);
+            }
+        }
     }
 
     public CustomItemClickListener getItemCLickListener()

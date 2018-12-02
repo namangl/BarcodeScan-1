@@ -285,8 +285,7 @@ public class BarcodeScannerActivity extends AppCompatActivity {
                                 setResult(Activity.RESULT_OK, new Intent().putExtra(RETURN_BARCODE,contactDetail.getText()));
                                 finish();
                             } else{
-                                showToast("Already Added");
-                                setResult(Activity.RESULT_OK, new Intent().putExtra(RETURN_BARCODE,contactDetail.getText()));
+                                setResult(Activity.RESULT_CANCELED, new Intent().putExtra(RETURN_BARCODE,contactDetail.getText()));
                                 finish();
                             }
                     }
