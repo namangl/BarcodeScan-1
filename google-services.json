@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "642510410100",
+    "firebase_url": "https://mlkitbarcodescan.firebaseio.com",
+    "project_id": "mlkitbarcodescan",
+    "storage_bucket": "mlkitbarcodescan.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:642510410100:android:d9d11d79ba4cfffd",
+        "android_client_info": {
+          "package_name": "com.droidmentor.mlkitbarcodescan"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "642510410100-cjggmoj4r7rjrsc69n3u0s8ldtauc5q6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDu8lM1mUmMIfvCQvrJEoC3pN9NBPj1nHI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
